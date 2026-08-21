@@ -14,21 +14,28 @@ import mlflow
 import mlflow.sklearn
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from src.models import build_gemini_style_pipelines
+from src.features import create_temporal_features
 from sklearn.model_selection import train_test_split
 
 def run_training(input_path: str, experiment_name: str = "hashtag-ltv-experiment"):
     """Treina modelos e loga métricas no MLflow."""
     
     # 1. Configuração do MLflow
-    # O MLflow pegará as credenciais das variáveis de ambiente no CI
-    # Localmente, ele usará o que estiver configurado ou o tracking_uri se definido
     mlflow.set_experiment(experiment_name)
     
     print(f"Lendo dados de: {input_path}")
     df = pd.read_csv(input_path)
     
+    # Garantir que as colunas temporais existam para o pipeline
+    if "data_compra" in df.columns:
+        df["data_compra"] = pd.to_datetime(df["data_compra"])
+        df = create_temporal_features(df, date_col="data_compra")
+        print("Atributos temporais (mes_compra, dia_semana_compra) criados.")
+    
     target_col = "LTV"
-    X = df.drop(columns=[target_col]).copy()
+    # Remover colunas que não são preditoras e o target
+    drop_cols = [target_col, "ID", "data_compra", "Renda"]
+    X = df.drop(columns=[c for c in drop_cols if c in df.columns]).copy()
     y = df[target_col].copy()
     
     X_train, X_test, y_train, y_test = train_test_split(
@@ -57,7 +64,7 @@ def run_training(input_path: str, experiment_name: str = "hashtag-ltv-experiment
             rmse = float(np.sqrt(mean_squared_error(y_test, y_pred)))
             r2 = float(r2_score(y_test, y_pred))
             
-            # Log de parâmetros (exemplo: se for RF, loga n_estimators)
+            # Log de parâmetros
             if "Random Forest" in name:
                 rf_model = pipe.named_steps["model"]
                 mlflow.log_param("n_estimators", rf_model.n_estimators)
