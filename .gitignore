@@ -59,7 +59,7 @@ mlartifacts/
 # --- DVC ----------------------------------------------------------------------
 .dvc/tmp/
 .dvc/cache/
-/dvc.lock
+!dvc.lock
 !*.dvc
 !.dvc/config
 !.dvc/.gitignore
