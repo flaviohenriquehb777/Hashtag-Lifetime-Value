@@ -14,7 +14,6 @@ import mlflow
 import mlflow.sklearn
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from src.models import build_gemini_style_pipelines
-from src.features import create_temporal_features
 from sklearn.model_selection import train_test_split
 
 def run_training(input_path: str, experiment_name: str = "hashtag-ltv-experiment"):
@@ -26,16 +25,22 @@ def run_training(input_path: str, experiment_name: str = "hashtag-ltv-experiment
     print(f"Lendo dados de: {input_path}")
     df = pd.read_csv(input_path)
     
-    # Garantir que as colunas temporais existam para o pipeline
+    # Recriar as colunas temporais EXATAMENTE como o preprocessor espera
     if "data_compra" in df.columns:
         df["data_compra"] = pd.to_datetime(df["data_compra"])
-        df = create_temporal_features(df, date_col="data_compra")
-        print("Atributos temporais (mes_compra, dia_semana_compra) criados.")
+        # As colunas esperadas pelo build_gemini_style_pipelines no models.py são:
+        # "dia_semana_compra" e "mes_compra"
+        df["dia_semana_compra"] = df["data_compra"].dt.dayofweek
+        df["mes_compra"] = df["data_compra"].dt.month
+        print("Atributos temporais (mes_compra, dia_semana_compra) recriados.")
     
     target_col = "LTV"
-    # Remover colunas que não são preditoras e o target
-    drop_cols = [target_col, "ID", "data_compra", "Renda"]
-    X = df.drop(columns=[c for c in drop_cols if c in df.columns]).copy()
+    # O preprocessor no models.py espera essas colunas:
+    # Numéricas: "valor_1_compra"
+    # Categóricas: "Produto Fonte", "Fonte Campanha", "Sexo", "Formacao", "dia_semana_compra", "mes_compra"
+    # Passthrough: "recorrente_1_compra"
+    
+    X = df.drop(columns=[target_col]).copy()
     y = df[target_col].copy()
     
     X_train, X_test, y_train, y_test = train_test_split(
