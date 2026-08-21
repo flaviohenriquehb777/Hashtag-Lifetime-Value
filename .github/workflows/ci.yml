@@ -28,7 +28,8 @@ jobs:
 
       - name: Pull data from DVC
         run: |
-          dvc pull || echo "DVC Pull falhou. Verifique as credenciais DVC_ACCESS_KEY_ID e DVC_SECRET_ACCESS_KEY no GitHub Secrets."
+          dvc pull
+          ls -l data/raw/ltv_base.csv
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
