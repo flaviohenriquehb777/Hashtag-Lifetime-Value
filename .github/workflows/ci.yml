@@ -27,7 +27,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov dvc-s3
+          pip install pytest pytest-cov
 
       - name: Setup DVC
         uses: iterative/setup-dvc@v1
@@ -46,9 +46,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
-          MLFLOW_TRACKING_URI: https://dagshub.com/flaviohenriquehb777/Hashtag-Lifetime-Value.mlflow
-          MLFLOW_TRACKING_USERNAME: flaviohenriquehb777
-          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DVC_ACCESS_KEY_ID }}
+          DAGSHUB_TOKEN: ${{ secrets.DVC_ACCESS_KEY_ID }}
 
       - name: Run Unit Tests with Pytest
         run: |

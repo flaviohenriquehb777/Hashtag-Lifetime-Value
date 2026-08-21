@@ -12,6 +12,7 @@ import pandas as pd
 import numpy as np
 import mlflow
 import mlflow.sklearn
+import dagshub
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from src.models import build_gemini_style_pipelines
 from sklearn.model_selection import train_test_split
@@ -19,7 +20,13 @@ from sklearn.model_selection import train_test_split
 def run_training(input_path: str, experiment_name: str = "hashtag-ltv-experiment"):
     """Treina modelos e loga métricas no MLflow."""
     
-    # 1. Configuração do MLflow
+    # 1. Configuração do MLflow via DagsHub
+    repo_owner = "flaviohenriquehb777"
+    repo_name = "Hashtag-Lifetime-Value"
+    
+    print(f"Inicializando DagsHub MLflow para {repo_owner}/{repo_name}...")
+    dagshub.init(repo_owner=repo_owner, repo_name=repo_name, mlflow=True)
+    
     mlflow.set_experiment(experiment_name)
     
     print(f"Lendo dados de: {input_path}")
