@@ -23,18 +23,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
 
-      # Opcional: Descomente abaixo se configurar DVC com DagsHub/S3 para usar CSVs reais nos testes
-      # - name: Setup DVC
-      #   uses: iterative/setup-dvc@v1
-      #
-      # - name: Pull data from DVC
-      #   run: |
-      #     dvc remote add -d storage s3://dvc
-      #     dvc remote modify storage endpointurl https://dagshub.com/flaviohenriquehb777/Hashtag-Lifetime-Value.s3
-      #     dvc pull
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+
+      - name: Pull data from DVC
+        run: dvc pull
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
 
       - name: Install dependencies
         run: |
