@@ -7,3 +7,9 @@ stages:
       - src/data_loader.py
     outs:
       - data/final/ltv_base_final.csv
+  train:
+    cmd: python src/pipeline_train.py data/final/ltv_base_final.csv
+    deps:
+      - data/final/ltv_base_final.csv
+      - src/pipeline_train.py
+      - src/models.py
