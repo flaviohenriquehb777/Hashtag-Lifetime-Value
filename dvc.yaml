@@ -1,0 +1,9 @@
+stages:
+  cleaning:
+    cmd: python src/pipeline_cleaning.py data/raw/ltv_base.csv data/final/ltv_base_final.csv
+    deps:
+      - data/raw/ltv_base.csv
+      - src/pipeline_cleaning.py
+      - src/data_loader.py
+    outs:
+      - data/final/ltv_base_final.csv
