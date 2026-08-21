@@ -1,14 +1,16 @@
+<div align="center">
+
 # 🎯 Hashtag LTV Prediction
 
-<p align="center">
-  <img src="reports/figures/Logo_linkedin_vazada.png" alt="Hashtag Logo" width="200">
-</p>
+<img src="reports/figures/Logo_linkedin_vazada.png" alt="Hashtag Logo" width="200">
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-1.3+-orange.svg)](https://scikit-learn.org/)
 [![MLOps](https://img.shields.io/badge/MLOps-MLflow%20%7C%20DVC-red.svg)](https://mlflow.org/)
-[![Build Status](https://github.com/flaviohenriquehb/Hashtag-Lifetime-Value/actions/workflows/ci.yml/badge.svg)](https://github.com/flaviohenriquehb/Hashtag-Lifetime-Value/actions)
+[![Build Status](https://github.com/flaviohenriquehb777/Hashtag-Lifetime-Value/actions/workflows/ci.yml/badge.svg)](https://github.com/flaviohenriquehb777/Hashtag-Lifetime-Value/actions)
+
+</div>
 
 > Previsão de **Lifetime Value (LTV)** dos clientes da Hashtag Treinamentos, estruturado com padrão **CRISP-DM**, boas práticas de Engenharia de Software e MLOps para Ciência de Dados.
 

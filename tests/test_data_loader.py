@@ -26,7 +26,7 @@ def dummy_raw_df():
     return pd.DataFrame({
         "ID": [f"ID_{i}" for i in range(n)],
         "LTV": np.random.uniform(100, 1000, n),
-        "data_compra": dates.astype(str), # Simulando string do CSV
+        "data_compra": np.arange(44927, 44927 + n), # Serial Excel para 2023-01-01 em diante
         "valor_1_compra": np.random.uniform(50, 500, n),
         "recorrente_1_compra": np.random.choice([0, 1], n),
         "Produto Fonte": np.random.choice(["Excel", "Power BI", "Python"], n),

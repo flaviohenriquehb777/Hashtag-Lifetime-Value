@@ -44,7 +44,7 @@ def test_evaluate_models_kfold_returns_expected_table(dummy_clean_df):
         test_df=test_df,
         scaling="robust",
         log_target=True,
-        categorical_min_frequency=0, # Desativar agrupamento raro para teste pequeno
+        categorical_min_frequency=None, # Desativar agrupamento raro para teste pequeno
     )
 
     results, _ = evaluate_models_kfold(prepared.X_train, prepared.y_train, n_splits=5, random_state=42)

@@ -21,7 +21,7 @@ def dummy_raw_df():
     return pd.DataFrame({
         "ID": [f"ID_{i}" for i in range(n)],
         "LTV": np.random.uniform(100, 1000, n),
-        "data_compra": dates.astype(str),
+        "data_compra": np.arange(44927, 44927 + n),
         "valor_1_compra": np.random.uniform(50, 500, n),
         "recorrente_1_compra": np.random.choice([0, 1], n),
         "Produto Fonte": np.random.choice(["Excel", "Power BI", "Python"], n),
@@ -51,7 +51,7 @@ def test_prepare_datasets_for_modeling_fits_only_on_train(dummy_raw_df):
         test_df=test_df,
         scaling="robust",
         log_target=True,
-        categorical_min_frequency=0,
+        categorical_min_frequency=None,
     )
 
     assert list(prepared.X_train.columns) == list(prepared.X_val.columns)
