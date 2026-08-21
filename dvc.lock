@@ -1,0 +1,37 @@
+schema: '2.0'
+stages:
+  cleaning:
+    cmd: python -m src.pipeline_cleaning data/raw/ltv_base.csv data/final/ltv_base_final.csv
+    deps:
+    - path: data/raw/ltv_base.csv
+      hash: md5
+      md5: 8352ba75592e5dc178f8cc090664fa97
+      size: 3703914
+    - path: src/data_loader.py
+      hash: md5
+      md5: f40cde372f77dcdafce16bb6a5330835
+      size: 10527
+    - path: src/pipeline_cleaning.py
+      hash: md5
+      md5: 8cb37f5b35cf60f595ae05635b60514b
+      size: 883
+    outs:
+    - path: data/final/ltv_base_final.csv
+      hash: md5
+      md5: d5ad3f0a8885485238362b6b9b8f6ccf
+      size: 4016461
+  train:
+    cmd: python -m src.pipeline_train data/final/ltv_base_final.csv
+    deps:
+    - path: data/final/ltv_base_final.csv
+      hash: md5
+      md5: d5ad3f0a8885485238362b6b9b8f6ccf
+      size: 4016461
+    - path: src/models.py
+      hash: md5
+      md5: 22ea9b73c60f4be8766e76b54efbfc38
+      size: 9168
+    - path: src/pipeline_train.py
+      hash: md5
+      md5: 6ff09414f40430284a795eceb203cbec
+      size: 3481
