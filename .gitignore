@@ -1,0 +1,76 @@
+# ==============================================================================
+# .gitignore – Hashtag LTV Prediction
+# ==============================================================================
+
+# --- Python -------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.whl
+.Python
+develop-eggs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- Virtual Environments -----------------------------------------------------
+.venv/
+venv/
+ENV/
+env/
+.env
+
+# --- Data & Model Artifacts (tracked by DVC, not Git) -------------------------
+*.csv
+*.pkl
+*.joblib
+*.h5
+*.parquet
+data/processed/
+data/final/
+models/*.pkl
+models/*.joblib
+
+# --- Jupyter Notebooks --------------------------------------------------------
+.ipynb_checkpoints/
+notebooks/history_runs/
+
+# --- IDE / OS -----------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- MLflow -------------------------------------------------------------------
+mlruns/
+mlartifacts/
+
+# --- DVC ----------------------------------------------------------------------
+/dvc.lock
+*.dvc
+.dvc/tmp/
+.dvc/cache/
+
+# --- Reports ------------------------------------------------------------------
+reports/figures/*.png
+reports/figures/*.jpg
+reports/figures/*.svg
+
+# --- Docker -------------------------------------------------------------------
+*.log
+docker-compose.override.yml
+
+# --- Misc ---------------------------------------------------------------------
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/

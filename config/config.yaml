@@ -1,0 +1,86 @@
+# ==============================================================================
+# Hashtag LTV Prediction – Project Configuration
+# ==============================================================================
+# Segue metodologia CRISP-DM. Este arquivo centraliza todos os parâmetros
+# para reprodutibilidade via DVC + MLflow.
+# ==============================================================================
+
+project:
+  name: "hashtag-ltv-prediction"
+  version: "0.1.0"
+  description: "Previsão de Lifetime Value (LTV) para alunos da Hashtag Treinamentos"
+  author: "Flavio"
+
+# --- Paths -------------------------------------------------------------------
+paths:
+  raw_data: "data/raw/ltv_base.csv"
+  processed_data: "data/processed/"
+  final_data: "data/final/"
+  final_modeling_data: "data/final/ltv_base_final.csv"
+  models: "models/"
+  reports: "reports/figures/"
+
+# --- Data Split ---------------------------------------------------------------
+data_split:
+  test_size: 0.2
+  validation_size: 0.1
+  random_state: 42
+  stratify_column: null  # Definir após EDA se necessário
+
+# --- Feature Engineering ------------------------------------------------------
+features:
+  numerical_imputer: "median"
+  categorical_encoder: "onehot"  # onehot
+  scaling: "robust"              # standard, robust
+  categorical_min_frequency: 100
+  log_target: true
+  rfm_enabled: true
+
+# --- Model Training -----------------------------------------------------------
+training:
+  baseline:
+    model: "ridge"
+    alpha: 1.0
+  advanced:
+    models:
+      - name: "xgboost"
+        n_estimators: 500
+        max_depth: 6
+        learning_rate: 0.05
+      - name: "lightgbm"
+        n_estimators: 500
+        max_depth: -1
+        learning_rate: 0.05
+      - name: "catboost"
+        iterations: 500
+        depth: 6
+        learning_rate: 0.05
+  hyperparameter_tuning:
+    n_trials: 100
+    cv_folds: 5
+    scoring: "neg_mean_absolute_error"
+
+# --- Evaluation ---------------------------------------------------------------
+evaluation:
+  metrics:
+    - "mae"
+    - "rmse"
+    - "mape"
+    - "r2"
+  threshold_mape: 0.15  # Threshold de aceitação de negócio
+
+# --- MLflow -------------------------------------------------------------------
+mlflow:
+  tracking_uri: "https://dagshub.com/<user>/<repo>.mlflow"  # Substituir
+  experiment_name: "hashtag-ltv-experiment"
+  registry_model_name: "hashtag-ltv-model"
+
+# --- DVC ----------------------------------------------------------------------
+dvc:
+  remote_name: "dagshub-storage"
+  remote_url: "https://dagshub.com/<user>/<repo>.dvc"  # Substituir
+
+# --- Docker -------------------------------------------------------------------
+docker:
+  base_image: "python:3.11-slim"
+  port: 8000
