@@ -31,8 +31,10 @@ env/
 *.joblib
 *.h5
 *.parquet
-data/processed/
-data/final/
+data/processed/*
+!data/processed/.gitkeep
+data/final/*
+!data/final/.gitkeep
 models/*.pkl
 models/*.joblib
 
@@ -55,14 +57,13 @@ mlruns/
 mlartifacts/
 
 # --- DVC ----------------------------------------------------------------------
-.dvc/
-! .dvc/config
-! .dvc/.gitignore
-! .dvcignore
-! *.dvc
 .dvc/tmp/
 .dvc/cache/
 /dvc.lock
+!*.dvc
+!.dvc/config
+!.dvc/.gitignore
+!.dvcignore
 
 # --- Reports ------------------------------------------------------------------
 reports/figures/*.png
