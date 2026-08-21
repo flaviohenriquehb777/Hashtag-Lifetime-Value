@@ -19,7 +19,11 @@ from openpyxl.utils import get_column_letter
 from openpyxl.workbook.defined_name import DefinedName
 from openpyxl.worksheet.datavalidation import DataValidation
 from sklearn.model_selection import train_test_split
-from win32com.client import Dispatch
+try:
+    from win32com.client import Dispatch
+    HAS_WIN32COM = True
+except ImportError:
+    HAS_WIN32COM = False
 
 from .models import build_gemini_style_pipelines, evaluate_models_on_final_base_test
 
@@ -652,6 +656,12 @@ def validate_excel_against_python(
     tolerance: float = 1e-9,
 ) -> pd.DataFrame:
     """Executa o loop de validação comparando Excel real vs fórmula Python."""
+    if not HAS_WIN32COM:
+        raise ImportError(
+            "O módulo 'pywin32' é necessário para a validação real no Excel. "
+            "Esta funcionalidade só está disponível em Windows com Excel instalado."
+        )
+
     workbook_path = str(Path(workbook_path).resolve())
     excel = Dispatch("Excel.Application")
     excel.Visible = False
