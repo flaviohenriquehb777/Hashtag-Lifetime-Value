@@ -20,14 +20,20 @@ from sklearn.model_selection import train_test_split
 def run_training(input_path: str, experiment_name: str = "hashtag-ltv-experiment"):
     """Treina modelos e loga métricas no MLflow."""
     
-    # 1. Configuração do MLflow via DagsHub
+    # 1. Configuração do MLflow via DagsHub (Resiliente)
     repo_owner = "flaviohenriquehb777"
     repo_name = "Hashtag-Lifetime-Value"
     
-    print(f"Inicializando DagsHub MLflow para {repo_owner}/{repo_name}...")
-    dagshub.init(repo_owner=repo_owner, repo_name=repo_name, mlflow=True)
-    
-    mlflow.set_experiment(experiment_name)
+    mlflow_active = False
+    try:
+        print(f"Tentando inicializar DagsHub MLflow para {repo_owner}/{repo_name}...")
+        # dagshub.init() configura o tracking_uri, username e password automaticamente
+        dagshub.init(repo_owner=repo_owner, repo_name=repo_name, mlflow=True)
+        mlflow.set_experiment(experiment_name)
+        mlflow_active = True
+        print("MLflow inicializado com sucesso.")
+    except Exception as e:
+        print(f"Aviso: Falha ao inicializar MLflow/DagsHub ({e}). O treinamento seguirá sem log remoto.")
     
     print(f"Lendo dados de: {input_path}")
     df = pd.read_csv(input_path)
@@ -62,34 +68,35 @@ def run_training(input_path: str, experiment_name: str = "hashtag-ltv-experiment
         # Sanitiza o nome para o MLflow
         run_name = name.replace(" ", "_").replace(".", "").replace("(", "").replace(")", "")
         
-        with mlflow.start_run(run_name=run_name):
-            print(f"Treinando {name}...")
-            
-            # Treino
-            pipe.fit(X_train, y_train)
-            
-            # Predição
-            y_pred = pipe.predict(X_test)
-            
-            # Métricas
-            mae = float(mean_absolute_error(y_test, y_pred))
-            rmse = float(np.sqrt(mean_squared_error(y_test, y_pred)))
-            r2 = float(r2_score(y_test, y_pred))
-            
-            # Log de parâmetros
-            if "Random Forest" in name:
-                rf_model = pipe.named_steps["model"]
-                mlflow.log_param("n_estimators", rf_model.n_estimators)
-            
-            # Log de métricas
-            mlflow.log_metric("MAE", mae)
-            mlflow.log_metric("RMSE", rmse)
-            mlflow.log_metric("R2", r2)
-            
-            # Log do modelo
-            mlflow.sklearn.log_model(pipe, artifact_path="model", registered_model_name=run_name)
-            
-            print(f"[{name}] R2: {r2:.4f} | RMSE: {rmse:.2f} | MAE: {mae:.2f}")
+        # Treino (Sempre executado)
+        print(f"Treinando {name}...")
+        pipe.fit(X_train, y_train)
+        y_pred = pipe.predict(X_test)
+        
+        # Métricas
+        mae = float(mean_absolute_error(y_test, y_pred))
+        rmse = float(np.sqrt(mean_squared_error(y_test, y_pred)))
+        r2 = float(r2_score(y_test, y_pred))
+        print(f"[{name}] R2: {r2:.4f} | RMSE: {rmse:.2f} | MAE: {mae:.2f}")
+
+        # Log de experimentos (Apenas se MLflow estiver ativo)
+        if mlflow_active:
+            try:
+                with mlflow.start_run(run_name=run_name, nested=True):
+                    # Log de parâmetros
+                    if "Random Forest" in name:
+                        rf_model = pipe.named_steps["model"]
+                        mlflow.log_param("n_estimators", rf_model.n_estimators)
+                    
+                    # Log de métricas
+                    mlflow.log_metric("MAE", mae)
+                    mlflow.log_metric("RMSE", rmse)
+                    mlflow.log_metric("R2", r2)
+                    
+                    # Log do modelo
+                    mlflow.sklearn.log_model(pipe, artifact_path="model", registered_model_name=run_name)
+            except Exception as e:
+                print(f"Aviso: Falha ao logar run no MLflow ({e})")
 
     print("Treinamento e log de experimentos concluídos!")
 

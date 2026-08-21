@@ -46,7 +46,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
-          DAGSHUB_TOKEN: ${{ secrets.DVC_ACCESS_KEY_ID }}
+          DAGSHUB_USER_TOKEN: ${{ secrets.DVC_ACCESS_KEY_ID }}
 
       - name: Run Unit Tests with Pytest
         run: |
