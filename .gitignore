@@ -66,9 +66,9 @@ mlartifacts/
 !.dvcignore
 
 # --- Reports ------------------------------------------------------------------
-reports/figures/*.png
-reports/figures/*.jpg
-reports/figures/*.svg
+reports/figures/*
+!reports/figures/.gitkeep
+!reports/figures/Logo_linkedin_vazada.png
 
 # --- Docker -------------------------------------------------------------------
 *.log
