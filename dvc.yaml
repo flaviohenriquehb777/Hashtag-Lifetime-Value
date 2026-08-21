@@ -1,6 +1,6 @@
 stages:
   cleaning:
-    cmd: python src/pipeline_cleaning.py data/raw/ltv_base.csv data/final/ltv_base_final.csv
+    cmd: python -m src.pipeline_cleaning data/raw/ltv_base.csv data/final/ltv_base_final.csv
     deps:
       - data/raw/ltv_base.csv
       - src/pipeline_cleaning.py
@@ -8,7 +8,7 @@ stages:
     outs:
       - data/final/ltv_base_final.csv
   train:
-    cmd: python src/pipeline_train.py data/final/ltv_base_final.csv
+    cmd: python -m src.pipeline_train data/final/ltv_base_final.csv
     deps:
       - data/final/ltv_base_final.csv
       - src/pipeline_train.py
