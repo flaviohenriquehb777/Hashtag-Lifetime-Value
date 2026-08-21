@@ -1,3 +1,5 @@
+<div align="center">
+
 # 🎯 Hashtag LTV Prediction
 
 <p align="center">
@@ -11,6 +13,8 @@
   <a href="https://mlflow.org/"><img src="https://img.shields.io/badge/MLOps-MLflow%20%7C%20DVC-red.svg" alt="MLOps"></a>
   <a href="https://github.com/flaviohenriquehb777/Hashtag-Lifetime-Value/actions"><img src="https://github.com/flaviohenriquehb777/Hashtag-Lifetime-Value/actions/workflows/ci.yml/badge.svg" alt="Build Status"></a>
 </p>
+
+</div>
 
 > Previsão de **Lifetime Value (LTV)** dos clientes da Hashtag Treinamentos, estruturado com padrão **CRISP-DM**, boas práticas de Engenharia de Software e MLOps para Ciência de Dados.
 
