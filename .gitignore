@@ -55,10 +55,14 @@ mlruns/
 mlartifacts/
 
 # --- DVC ----------------------------------------------------------------------
-/dvc.lock
-*.dvc
+.dvc/
+! .dvc/config
+! .dvc/.gitignore
+! .dvcignore
+! *.dvc
 .dvc/tmp/
 .dvc/cache/
+/dvc.lock
 
 # --- Reports ------------------------------------------------------------------
 reports/figures/*.png
