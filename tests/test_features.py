@@ -51,7 +51,7 @@ def test_prepare_datasets_for_modeling_fits_only_on_train(dummy_raw_df):
         test_df=test_df,
         scaling="robust",
         log_target=True,
-        categorical_min_frequency=None,
+        categorical_min_frequency=1,
     )
 
     assert list(prepared.X_train.columns) == list(prepared.X_val.columns)
